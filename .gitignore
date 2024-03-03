@@ -24,4 +24,4 @@ go.work
 .env*
 
 # Air
-tmp/*
+tmp
