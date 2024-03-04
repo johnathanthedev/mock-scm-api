@@ -1,10 +1,9 @@
-# .air.toml
-
-# Watched directories or files
 [[watcher]]
 dir = "."
 exclude_dir = ["tmp", "vendor"]
 
-# Build commands
 [[build]]
 cmd = "go build -o ./bin/main ./cmd/main.go"
+
+[build.exclude]
+paths = ["*.env"]
