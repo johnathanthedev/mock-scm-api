@@ -1,7 +1,4 @@
-<!-- Enter jira ticket in the hashtags -->
-
-<!-- TODO: Add Jira project -->
-[Jira Ticket [JiraProject]-##]()
+[MSMC-##](https://mock-scm.atlassian.net/browse/MSCM-##)
 
 ## Description
 
