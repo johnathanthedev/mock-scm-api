@@ -1,0 +1,9 @@
+[[watcher]]
+dir = "."
+exclude_dir = ["tmp", "vendor"]
+
+[[build]]
+cmd = "go build -o ./main ./main.go"
+
+[build.exclude]
+paths = ["*.env"]
