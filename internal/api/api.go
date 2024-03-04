@@ -1,13 +1,17 @@
 package api
 
 import (
+	"scm-api/internal/api/validator"
+
 	"github.com/labstack/echo/v4"
 )
 
 func StartServer() error {
-    e := echo.New()
+	e := echo.New()
 
-    InitRoutes(e)
+	cv := validator.Init()
 
-    return e.Start(":8080")
+	InitRoutes(e, cv)
+
+	return e.Start(":8080")
 }

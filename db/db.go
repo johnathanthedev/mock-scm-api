@@ -34,3 +34,7 @@ func Close() {
 		db.Close()
 	}
 }
+
+func GetDB() *gorm.DB {
+	return database
+}
