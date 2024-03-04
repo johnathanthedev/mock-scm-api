@@ -25,3 +25,5 @@ go.work
 
 # Air
 tmp
+
+vendor
