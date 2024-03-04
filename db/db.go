@@ -13,20 +13,18 @@ var (
 )
 
 func Connect() error {
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-	)
+	psqlURL := os.Getenv("POSTGRESQL_URL")
+	if psqlURL == "" {
+		return fmt.Errorf("POSTGRESQL_URL environment variable is not set")
+	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(psqlURL), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
 	database = db
+	fmt.Println("Database connection established")
 	return nil
 }
 
