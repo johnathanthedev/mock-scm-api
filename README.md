@@ -27,7 +27,7 @@ Since this is a proof of concept not all features are included. This means no:
 
 ### Built With
 
-[![Go](https://img.shields.io/badge/GO-blue)][GO-url] [![GORM](https://img.shields.io/badge/GORM-skyblue)][GO-url] [![Echo](https://img.shields.io/badge/Echo-lightblue)][Echo-url] [![Air](https://img.shields.io/badge/Air-grey)][Air-url] [![Postgres](https://img.shields.io/badge/Postgresql-red)][psql-url]
+[![Go](https://img.shields.io/badge/GO-blue)][GO-url] [![GORM](https://img.shields.io/badge/GORM-skyblue)][GORM-url] [![Echo](https://img.shields.io/badge/Echo-lightblue)][Echo-url] [![Air](https://img.shields.io/badge/Air-grey)][Air-url] [![Postgres](https://img.shields.io/badge/Postgresql-red)][psql-url]
 
 ## Getting Started
 
