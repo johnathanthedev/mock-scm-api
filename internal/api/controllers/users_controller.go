@@ -23,3 +23,15 @@ func CreateUser(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, newUser)
 }
+
+func Login(c echo.Context) error {
+	req := c.Get("validatedRequest").(*dtos.LoginRequest)
+
+	if !users_service.UserExists(req.Username) {
+		return c.JSON(http.StatusConflict, map[string]string{"error": "User not found"})
+	}
+
+	response_message := map[string]string{"message": "Login successful"}
+
+	return c.JSON(http.StatusOK, response_message)
+}
