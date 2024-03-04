@@ -13,4 +13,5 @@ import (
 
 func InitRoutes(e *echo.Echo, cv *validator.CustomValidator) {
 	e.POST("/users/create", controllers.CreateUser, middleware.ValidationsMiddleware(cv, &dtos.CreateUserRequest{}))
+	e.POST("/users/login", controllers.Login, middleware.ValidationsMiddleware(cv, &dtos.LoginRequest{}))
 }
