@@ -78,6 +78,13 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 					if len(fieldValue.String()) > maxLen {
 						return fmt.Errorf("'%s' must be at most %s characters long", field.Name, ruleValue)
 					}
+				case "oneof":
+					fieldValue := value.Field(i).String()
+					allowedValues := strings.Split(ruleValue, " ")
+
+					if !contains(allowedValues, fieldValue) {
+						return fmt.Errorf("'%s' must be one of [%s]", field.Name, strings.Join(allowedValues, ", "))
+					}
 				}
 			}
 		}
@@ -85,4 +92,15 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 	// If no validation errors were found, return nil
 	return nil
+}
+
+// contains is a helper function that checks if a slice of strings contains a specific string value.
+// It's used for the 'oneof' validation rule to verify if the field's value matches one of the allowed options.
+func contains(slice []string, val string) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
 }
