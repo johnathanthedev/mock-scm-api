@@ -3,8 +3,8 @@ package users_service
 import (
 	"errors"
 
+	models "scm-api/api/models"
 	"scm-api/db"
-	models "scm-api/internal/api/models"
 
 	"gorm.io/gorm"
 )

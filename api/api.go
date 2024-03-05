@@ -1,7 +1,7 @@
 package api
 
 import (
-	"scm-api/internal/api/validator"
+	"scm-api/api/validator"
 
 	"github.com/labstack/echo/v4"
 )

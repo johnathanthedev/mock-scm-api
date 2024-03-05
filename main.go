@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"scm-api/api"
 	"scm-api/db"
-	"scm-api/internal/api"
 
 	"github.com/joho/godotenv"
 )
