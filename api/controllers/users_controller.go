@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	dtos "scm-api/internal/api/dtos/requests"
-	"scm-api/internal/services/users_service"
+	dtos "scm-api/api/dtos/requests"
+	"scm-api/services/users_service"
 
 	"github.com/labstack/echo/v4"
 )

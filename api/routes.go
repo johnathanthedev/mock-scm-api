@@ -1,12 +1,12 @@
 package api
 
 import (
-	controllers "scm-api/internal/api/controllers"
+	controllers "scm-api/api/controllers"
 
-	"scm-api/internal/api/middleware"
-	"scm-api/internal/api/validator"
+	"scm-api/api/middleware"
+	"scm-api/api/validator"
 
-	dtos "scm-api/internal/api/dtos/requests"
+	dtos "scm-api/api/dtos/requests"
 
 	"github.com/labstack/echo/v4"
 )

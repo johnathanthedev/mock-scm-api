@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
@@ -10,8 +11,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
-//lint:ignore U1000 main is intentionally left unused as it serves as the entry point for this file
 func main() {
+	var forceVersion int
+	flag.IntVar(&forceVersion, "force", 0, "Force the version to this value if there are issues")
+	flag.Parse()
+
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
@@ -29,13 +33,21 @@ func main() {
 		log.Fatalf("could not create migration instance: %v", err)
 	}
 
+	if forceVersion != 0 {
+		if err := m.Force(forceVersion); err != nil {
+			log.Fatalf("could not force version %d: %v", forceVersion, err)
+		}
+		log.Printf("Forced version to %d successfully", forceVersion)
+		return
+	}
+
 	if err := m.Up(); err != nil {
 		if err == migrate.ErrNoChange {
 			log.Println("no migrations to apply")
 		} else {
 			log.Fatalf("could not apply migrations: %v", err)
 		}
+	} else {
+		log.Println("Migrations applied successfully")
 	}
-
-	log.Println("Migrations applied successfully")
 }
