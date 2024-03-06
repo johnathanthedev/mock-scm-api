@@ -1,4 +1,4 @@
-package dtos
+package requests
 
 import (
 	types "scm-api/types/operations"

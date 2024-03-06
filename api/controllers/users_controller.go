@@ -3,14 +3,14 @@ package controllers
 import (
 	"net/http"
 
-	dtos "scm-api/api/dtos/requests"
 	"scm-api/services/users_service"
+	user_requests "scm-api/types/users/requests"
 
 	"github.com/labstack/echo/v4"
 )
 
 func CreateUser(c echo.Context) error {
-	req := c.Get("validatedRequest").(*dtos.CreateUserRequest)
+	req := c.Get("validatedRequest").(*user_requests.CreateUserRequest)
 
 	if users_service.UserExists(req.Username) {
 		return c.JSON(http.StatusConflict, map[string]string{"error": "User already exists"})
@@ -25,7 +25,7 @@ func CreateUser(c echo.Context) error {
 }
 
 func Login(c echo.Context) error {
-	req := c.Get("validatedRequest").(*dtos.LoginRequest)
+	req := c.Get("validatedRequest").(*user_requests.LoginRequest)
 
 	if !users_service.UserExists(req.Username) {
 		return c.JSON(http.StatusConflict, map[string]string{"error": "User not found"})

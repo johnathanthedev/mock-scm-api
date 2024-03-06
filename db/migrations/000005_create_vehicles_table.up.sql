@@ -3,6 +3,8 @@ CREATE TABLE
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
     operation_id UUID DEFAULT NULL,
     name VARCHAR(50) UNIQUE NOT NULL,
+    make VARCHAR(50) DEFAULT NULL,
+    model VARCHAR(50) DEFAULT NULL,
     status VARCHAR(20) NOT NULL,
     crew_capacity INT NOT NULL,
     attributes JSONB DEFAULT NULL,

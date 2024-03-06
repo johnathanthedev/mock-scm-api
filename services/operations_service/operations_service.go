@@ -2,8 +2,8 @@ package operations_service
 
 import (
 	"errors"
-	dtos "scm-api/api/dtos/requests"
 	models "scm-api/api/models"
+	operation_types "scm-api/types/operations/requests"
 
 	"scm-api/db"
 
@@ -16,7 +16,7 @@ func OperationExists(name string) bool {
 	return !errors.Is(result.Error, gorm.ErrRecordNotFound)
 }
 
-func CreateOperation(operation dtos.CreateOperationRequest) (*models.Operation, error) {
+func CreateOperation(operation operation_types.CreateOperationRequest) (*models.Operation, error) {
 	newOperation := &models.Operation{
 		Name:   operation.Name,
 		Status: operation.Status,
