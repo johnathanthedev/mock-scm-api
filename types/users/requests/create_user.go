@@ -1,4 +1,4 @@
-package dtos
+package requests
 
 type CreateUserRequest struct {
 	// TODO: change to max 50

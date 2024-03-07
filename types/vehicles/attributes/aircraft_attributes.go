@@ -1,9 +1,8 @@
 package vehicle_attributes
 
 type BaseAircraftAttributes struct {
-	Model            string `json:"model"`
-	AircraftType     string `json:"aircraftType"`
-	OperationalRange int    `json:"operationalRange"` // Measured in kilometers (km)
+	AircraftType     string `json:"aircraft_type"`
+	OperationalRange int    `json:"operational_range"` // Measured in kilometers (km)
 }
 
 type DefenseAircraftAttributes struct {
@@ -11,5 +10,5 @@ type DefenseAircraftAttributes struct {
 	Armament         []string `json:"armament"`
 	Communication    []string `json:"communication"`
 	Surveillance     []string `json:"surveillance"`
-	SpecialEquipment []string `json:"specialEquipment"`
+	SpecialEquipment []string `json:"special_equipment"`
 }
