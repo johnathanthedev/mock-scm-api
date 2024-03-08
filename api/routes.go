@@ -16,8 +16,19 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator) {
 	e.POST("/users/create", controllers.CreateUser, middleware.ValidationsMiddleware(cv, &user_requests.CreateUserRequest{}))
 	e.POST("/users/login", controllers.Login, middleware.ValidationsMiddleware(cv, &user_requests.LoginRequest{}))
 
-	e.POST("/operations/create", controllers.CreateOperation, middleware.ValidationsMiddleware(cv, &operation_types.CreateOperationRequest{}))
+	e.POST(
+		"/operations/create",
+		controllers.CreateOperation,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &operation_types.CreateOperationRequest{}),
+	)
 
-	e.GET("/vehicles/list", controllers.GetVehicles)
-	e.POST("/vehicles/create", controllers.CreateVehicle, middleware.ValidationsMiddleware(cv, &vehicle_types.CreateVehicleRequest{}))
+	e.GET("/vehicles/list", controllers.GetVehicles, middleware.AuthorizationMiddleware())
+
+	e.POST(
+		"/vehicles/create",
+		controllers.CreateVehicle,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &vehicle_types.CreateVehicleRequest{}),
+	)
 }
