@@ -32,7 +32,7 @@ func JoinOperation(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request format"})
 	}
 
-	userAlreadyInOperation, err := operations_service.UserInOperation(req.OperationID, req.UserID)
+	userAlreadyInOperation, err := operations_service.IsUserInOperation(req.OperationID, req.UserID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to check operation membership"})
 	}
@@ -50,4 +50,13 @@ func JoinOperation(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "User successfully joined operation"})
+}
+
+func ListOperations(c echo.Context) error {
+	operations, err := operations_service.ListOperations()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve operations"})
+	}
+
+	return c.JSON(http.StatusOK, operations)
 }
