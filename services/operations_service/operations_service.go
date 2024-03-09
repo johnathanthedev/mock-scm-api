@@ -7,6 +7,7 @@ import (
 
 	"scm-api/db"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -27,4 +28,38 @@ func CreateOperation(operation operation_types.CreateOperationRequest) (*models.
 	}
 
 	return newOperation, nil
+}
+
+func AddUserToOperation(operationID uuid.UUID, userID uuid.UUID) error {
+	database := db.GetDB()
+
+	var operation models.Operation
+
+	if err := database.First(&operation, "id = ?", operationID).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("operation not found")
+		}
+		return err
+	}
+
+	if err := database.Model(&operation).Association("Users").Append(&models.User{ID: userID}); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func UserInOperation(operationID uuid.UUID, userID uuid.UUID) (bool, error) {
+	database := db.GetDB()
+
+	exists := false
+
+	query := `SELECT EXISTS(SELECT 1 FROM operation_users WHERE operation_id = ? AND user_id = ?)`
+
+	err := database.Raw(query, operationID, userID).Row().Scan(&exists)
+	if err != nil {
+		return false, err
+	}
+
+	return exists, nil
 }
