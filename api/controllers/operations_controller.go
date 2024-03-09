@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"scm-api/services/operations_service"
+	"scm-api/services/users_service"
 	operation_types "scm-api/types/operations/requests"
 
 	"github.com/labstack/echo/v4"
@@ -32,12 +33,23 @@ func JoinOperation(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request format"})
 	}
 
-	userAlreadyInOperation, err := operations_service.IsUserInOperation(req.OperationID, req.UserID)
+	username := c.Request().Header.Get("Authorization")
+
+	user_id, err := users_service.GetUserIdByUsername(username)
+	if err != nil {
+		if err.Error() == "user not found" {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "User not found"})
+		} else {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve user ID"})
+		}
+	}
+
+	userAlreadyInOperation, err := operations_service.IsUserInOperation(req.OperationID, user_id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to check operation membership"})
 	}
 
-	err = operations_service.AddUserToOperation(req.OperationID, req.UserID)
+	err = operations_service.AddUserToOperation(req.OperationID, user_id)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
@@ -54,6 +66,26 @@ func JoinOperation(c echo.Context) error {
 
 func ListOperations(c echo.Context) error {
 	operations, err := operations_service.ListOperations()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve operations"})
+	}
+
+	return c.JSON(http.StatusOK, operations)
+}
+
+func ListUserJoinedOperations(c echo.Context) error {
+	username := c.Request().Header.Get("Authorization")
+
+	user_id, err := users_service.GetUserIdByUsername(username)
+	if err != nil {
+		if err.Error() == "user not found" {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "User not found"})
+		} else {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve user ID"})
+		}
+	}
+
+	operations, err := operations_service.ListUserJoinedOperations(user_id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve operations"})
 	}

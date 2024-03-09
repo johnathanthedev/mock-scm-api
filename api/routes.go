@@ -24,6 +24,7 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator) {
 	)
 
 	e.GET("/operations/list", controllers.ListOperations, middleware.AuthorizationMiddleware())
+	e.GET("/operations/user-joined", controllers.ListUserJoinedOperations, middleware.AuthorizationMiddleware())
 	e.POST(
 		"/operations/join",
 		controllers.JoinOperation,
