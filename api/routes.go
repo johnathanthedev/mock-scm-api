@@ -23,6 +23,13 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator) {
 		middleware.ValidationsMiddleware(cv, &operation_types.CreateOperationRequest{}),
 	)
 
+	e.POST(
+		"/operations/join",
+		controllers.JoinOperation,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &operation_types.JoinOperationRequest{}),
+	)
+
 	e.GET("/vehicles/list", controllers.GetVehicles, middleware.AuthorizationMiddleware())
 
 	e.POST(
