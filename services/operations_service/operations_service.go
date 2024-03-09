@@ -95,3 +95,29 @@ func ListUserJoinedOperations(userID uuid.UUID) ([]models.Operation, error) {
 
 	return operations, nil
 }
+
+func RemoveUserFromOperation(operation models.Operation, userID uuid.UUID) error {
+	database := db.GetDB()
+
+	user := models.User{ID: userID}
+
+	if err := database.Model(&operation).Association("Users").Delete(&user); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func GetOperationByID(operationID uuid.UUID) (*models.Operation, error) {
+	var operation models.Operation
+	result := db.GetDB().First(&operation, "id = ?", operationID)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.New("operation not found")
+		}
+		return nil, result.Error
+	}
+
+	return &operation, nil
+}
