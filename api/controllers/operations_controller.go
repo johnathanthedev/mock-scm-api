@@ -101,7 +101,6 @@ func LeaveOperation(c echo.Context) error {
 
 	userID, _ := users_service.GetUserIdByUsername(username)
 
-	// Check if the operation exists and retrieve it if it does
 	operation, err := operations_service.GetOperationByID(req.OperationID)
 	if err != nil {
 		if err.Error() == "operation not found" {
