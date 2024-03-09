@@ -49,7 +49,7 @@ func AddUserToOperation(operationID uuid.UUID, userID uuid.UUID) error {
 	return nil
 }
 
-func UserInOperation(operationID uuid.UUID, userID uuid.UUID) (bool, error) {
+func IsUserInOperation(operationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	database := db.GetDB()
 
 	exists := false
@@ -62,4 +62,15 @@ func UserInOperation(operationID uuid.UUID, userID uuid.UUID) (bool, error) {
 	}
 
 	return exists, nil
+}
+
+func ListOperations() ([]models.Operation, error) {
+	var operations []models.Operation
+	result := db.GetDB().Find(&operations)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return operations, nil
 }
