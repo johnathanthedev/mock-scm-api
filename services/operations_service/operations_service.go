@@ -74,3 +74,24 @@ func ListOperations() ([]models.Operation, error) {
 
 	return operations, nil
 }
+
+func ListUserJoinedOperations(userID uuid.UUID) ([]models.Operation, error) {
+	var operations []models.Operation
+	database := db.GetDB()
+
+	err := database.Table("operations").
+		Joins("JOIN operation_users on operations.id = operation_users.operation_id").
+		Joins("JOIN users on users.id = operation_users.user_id").
+		Where("users.id = ?", userID).
+		Scan(&operations).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(operations) == 0 {
+		return []models.Operation{}, nil
+	}
+
+	return operations, nil
+}
