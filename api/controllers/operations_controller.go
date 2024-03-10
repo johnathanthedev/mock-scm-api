@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"scm-api/services/operations_service"
 	"scm-api/services/users_service"
+	"scm-api/services/vehicles_service"
 
 	operation_requests "scm-api/types/operations/requests"
 
@@ -121,4 +122,39 @@ func LeaveOperation(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "User successfully left operation"})
+}
+
+func AddVehicleToOperation(c echo.Context) error {
+	req, _ := c.Get("validatedRequest").(*operation_requests.AddVehicleToOperationRequest)
+
+	operation, err := operations_service.GetOperationByID(req.OperationID)
+	if err != nil {
+		if err.Error() == "operation not found" {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
+		} else {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to check operation existence"})
+		}
+	}
+
+	vehicle, err := vehicles_service.GetVehicleById(req.VehicleID)
+	if err != nil {
+		if err.Error() == "vehicle not found" {
+			return c.JSON(http.StatusNotFound, map[string]string{"error": "Vehicle not found"})
+		} else {
+			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to check vehicle existence"})
+		}
+	}
+
+	vehicleAlreadyInOperation := operations_service.IsVehicleInOperation(operation.ID, vehicle.ID)
+
+	if vehicleAlreadyInOperation {
+		return c.JSON(http.StatusConflict, map[string]string{"error": "Vehicle is already part of the operation"})
+	}
+
+	err = operations_service.AddVehicleToOperation(operation, vehicle)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to add vehicle to operation"})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{"message": "Vehicle successfully added to operation"})
 }
