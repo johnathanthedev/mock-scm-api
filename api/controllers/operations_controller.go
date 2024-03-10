@@ -5,15 +5,15 @@ import (
 	"net/http"
 	"scm-api/services/operations_service"
 	"scm-api/services/users_service"
-	"scm-api/types/operations/requests"
-	operation_types "scm-api/types/operations/requests"
+
+	operation_requests "scm-api/types/operations/requests"
 
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 
 func CreateOperation(c echo.Context) error {
-	req := c.Get("validatedRequest").(*operation_types.CreateOperationRequest)
+	req := c.Get("validatedRequest").(*operation_requests.CreateOperationRequest)
 
 	if operations_service.OperationExists(req.Name) {
 		return c.JSON(http.StatusConflict, map[string]string{"error": "Operation with same name already exists"})
@@ -28,7 +28,7 @@ func CreateOperation(c echo.Context) error {
 }
 
 func JoinOperation(c echo.Context) error {
-	req, ok := c.Get("validatedRequest").(*operation_types.JoinOperationRequest)
+	req, ok := c.Get("validatedRequest").(*operation_requests.JoinOperationRequest)
 
 	if !ok {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid request format"})
@@ -95,7 +95,7 @@ func ListUserJoinedOperations(c echo.Context) error {
 }
 
 func LeaveOperation(c echo.Context) error {
-	req := c.Get("validatedRequest").(*requests.LeaveOperationRequest)
+	req := c.Get("validatedRequest").(*operation_requests.LeaveOperationRequest)
 
 	username := c.Request().Header.Get("Authorization")
 
