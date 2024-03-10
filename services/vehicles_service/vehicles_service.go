@@ -7,6 +7,7 @@ import (
 
 	"scm-api/db"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -48,4 +49,18 @@ func GetAllVehicles() ([]models.Vehicle, error) {
 	}
 
 	return vehicles, nil
+}
+
+func GetVehicleById(vehicleID uuid.UUID) (*models.Vehicle, error) {
+	var vehicle models.Vehicle
+	result := db.GetDB().First(&vehicle, "id = ?", vehicleID)
+
+	if result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			return nil, errors.New("vehicle not found")
+		}
+		return nil, result.Error
+	}
+
+	return &vehicle, nil
 }
