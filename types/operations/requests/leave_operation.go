@@ -1,4 +1,4 @@
-package requests
+package operation_requests
 
 import (
 	"github.com/google/uuid"
