@@ -95,35 +95,6 @@ func ListUserJoinedOperations(c echo.Context) error {
 	return c.JSON(http.StatusOK, operations)
 }
 
-func LeaveOperation(c echo.Context) error {
-	req := c.Get("validatedRequest").(*operation_requests.LeaveOperationRequest)
-
-	username := c.Request().Header.Get("Authorization")
-
-	userID, _ := users_service.GetUserIdByUsername(username)
-
-	operation, err := operations_service.GetOperationByID(req.OperationID)
-	if err != nil {
-		if err.Error() == "operation not found" {
-			return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
-		} else {
-			return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve operation"})
-		}
-	}
-
-	isInOperation, _ := operations_service.IsUserInOperation(req.OperationID, userID)
-	if !isInOperation {
-		return c.JSON(http.StatusConflict, map[string]string{"error": "User is not part of the operation"})
-	}
-
-	err = operations_service.RemoveUserFromOperation(*operation, userID)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to leave operation"})
-	}
-
-	return c.JSON(http.StatusOK, map[string]string{"message": "User successfully left operation"})
-}
-
 func AddVehicleToOperation(c echo.Context) error {
 	req, _ := c.Get("validatedRequest").(*operation_requests.AddVehicleToOperationRequest)
 
