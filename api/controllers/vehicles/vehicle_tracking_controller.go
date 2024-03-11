@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"scm-api/services/vehicles_service"
+	vehicle_dtos "scm-api/types/vehicles/dtos"
 	vehicle_requests "scm-api/types/vehicles/requests"
 
 	ws "scm-api/ws"
@@ -22,8 +23,11 @@ func NewVehicleTrackingController(broker *ws.Broker) *VehicleController {
 func (vc *VehicleController) UpdateVehicleLocation(c echo.Context) error {
 	req := c.Get("validatedRequest").(*vehicle_requests.UpdateVehicleLocationRequest)
 
-	roomID := req.RoomID                                               // This should be dynamic based on your application logic
-	locationData := map[string]string{"location": "new location data"} // Example data structure
+	roomID := req.RoomID
+
+	locationData := vehicle_dtos.LocationDataDto{
+		Location: req.Location,
+	}
 
 	trackingService := vehicles_service.NewTrackingService(vc.Broker)
 	trackingService.BroadcastLocationUpdate(roomID, locationData)
