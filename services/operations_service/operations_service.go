@@ -3,6 +3,7 @@ package operations_service
 import (
 	"errors"
 	models "scm-api/api/models"
+	operation_dtos "scm-api/types/operations/dtos"
 	operation_types "scm-api/types/operations/requests"
 
 	"scm-api/db"
@@ -94,6 +95,47 @@ func ListUserJoinedOperations(userID uuid.UUID) ([]models.Operation, error) {
 	}
 
 	return operations, nil
+}
+
+func ListOperationsWithJoinStatus(userID uuid.UUID) ([]operation_dtos.OperationDto, error) {
+	var operations []models.Operation // Use the correct model that maps to your DB table
+	database := db.GetDB()
+
+	// First, get all operations from the 'operations' table.
+	if err := database.Find(&operations).Error; err != nil {
+		return nil, err
+	}
+
+	// Create a map to hold join status for operations.
+	operationsJoined := make(map[uuid.UUID]bool)
+
+	// Fetch all operations the user has joined and mark them in the map.
+	var userOperations []models.Operation
+	if err := database.Table("operations").
+		Joins("JOIN operation_users on operations.id = operation_users.operation_id").
+		Where("operation_users.user_id = ?", userID).
+		Select("operations.*"). // Make sure to select fields from the 'operations' table
+		Scan(&userOperations).Error; err != nil {
+		return nil, err
+	}
+
+	for _, op := range userOperations {
+		operationsJoined[op.ID] = true
+	}
+
+	// Map operations to OperationDto, updating the Joined field based on the operationsJoined map.
+	operationsDtos := make([]operation_dtos.OperationDto, len(operations))
+	for i, op := range operations {
+		joined := operationsJoined[op.ID]
+		operationsDtos[i] = operation_dtos.OperationDto{
+			ID:     op.ID,
+			Name:   op.Name,
+			Status: op.Status,
+			Joined: joined,
+		}
+	}
+
+	return operationsDtos, nil
 }
 
 func RemoveUserFromOperation(operation models.Operation, userID uuid.UUID) error {
