@@ -67,7 +67,11 @@ func JoinOperation(c echo.Context) error {
 }
 
 func ListOperations(c echo.Context) error {
-	operations, err := operations_service.ListOperations()
+	username := c.Request().Header.Get("Authorization")
+
+	user_id, _ := users_service.GetUserIdByUsername(username)
+
+	operations, err := operations_service.ListOperationsWithJoinStatus(user_id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve operations"})
 	}
