@@ -19,18 +19,16 @@ func VehicleExists(name string) bool {
 
 func CreateVehicle(vehicle vehicle_types.CreateVehicleRequest) (*models.Vehicle, error) {
 	newVehicle := &models.Vehicle{
-		OperationID:       vehicle.OperationID,
-		VehicleType:       vehicle.VehicleType,
-		Name:              vehicle.Name,
-		CarryVolume:       vehicle.CarryVolume,
-		MaxWeight:         vehicle.MaxWeight,
-		LastLocation:      vehicle.LastLocation,
-		DepartureLocation: vehicle.DepartureLocation,
-		ArrivalLocation:   vehicle.ArrivalLocation,
-		Status:            vehicle.Status,
-		PreferredSpeed:    vehicle.PreferredSpeed,
-		CrewCapacity:      vehicle.CrewCapacity,
-		Attributes:        vehicle.Attributes,
+		OperationID:    vehicle.OperationID,
+		VehicleType:    vehicle.VehicleType,
+		Name:           vehicle.Name,
+		CarryVolume:    vehicle.CarryVolume,
+		MaxWeight:      vehicle.MaxWeight,
+		LastLocation:   vehicle.LastLocation,
+		Status:         vehicle.Status,
+		PreferredSpeed: vehicle.PreferredSpeed,
+		CrewCapacity:   vehicle.CrewCapacity,
+		Attributes:     vehicle.Attributes,
 	}
 
 	if err := db.GetDB().Create(newVehicle).Error; err != nil {
