@@ -1,7 +1,7 @@
 CREATE TABLE
   IF NOT EXISTS operations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) UNIQUE NOT NULL,
     status VARCHAR(20) NOT NULL,
     operation_end TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

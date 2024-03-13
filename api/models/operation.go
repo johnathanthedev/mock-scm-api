@@ -3,13 +3,15 @@ package models
 import (
 	"time"
 
+	operation_types "scm-api/types/operations"
+
 	"github.com/google/uuid"
 )
 
 type Operation struct {
-	ID       uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
-	Name     string    `gorm:"not null"`
-	Status   string    `gorm:"not null"`
+	ID       uuid.UUID                       `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
+	Name     string                          `gorm:"unique,not null"`
+	Status   operation_types.OperationStatus `gorm:"not null"`
 	Vehicles []Vehicle
 	Users    []User `gorm:"many2many:operation_users;"`
 
