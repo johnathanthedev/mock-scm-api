@@ -12,7 +12,6 @@ import (
 
 type Vehicle struct {
 	ID             uuid.UUID                   `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
-	OperationID    *uuid.UUID                  `gorm:"null"`
 	VehicleType    vehicle_types.VehicleType   `gorm:"not null"`
 	Name           string                      `gorm:"unique;not null"`
 	CarryVolume    float32                     `gorm:"not null"`

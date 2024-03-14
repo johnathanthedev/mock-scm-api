@@ -19,7 +19,6 @@ func VehicleExists(name string) bool {
 
 func CreateVehicle(vehicle vehicle_types.CreateVehicleRequest) (*models.Vehicle, error) {
 	newVehicle := &models.Vehicle{
-		OperationID:    vehicle.OperationID,
 		VehicleType:    vehicle.VehicleType,
 		Name:           vehicle.Name,
 		CarryVolume:    vehicle.CarryVolume,
