@@ -18,18 +18,12 @@ var upgrader = websocket.Upgrader{
 func WebSocketHandler(broker *ws.Broker) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		operationID := c.QueryParam("operation-id")
-		uuidOperationID, err := uuid.Parse(operationID)
-		if err != nil {
-			// Return error if operation_id cannot be parsed into UUID
-			return c.JSON(http.StatusBadRequest, map[string]string{"error": "Invalid operation ID"})
-		}
+		uuidOperationID, _ := uuid.Parse(operationID)
 
 		operation, err := operations_service.GetOperationByID(uuidOperationID)
 		if err != nil {
 			if err.Error() == "operation not found" {
 				return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
-			} else {
-				return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to check operation existence"})
 			}
 		}
 
@@ -37,7 +31,6 @@ func WebSocketHandler(broker *ws.Broker) echo.HandlerFunc {
 			return c.JSON(http.StatusForbidden, map[string]string{"error": "Unable to join operation. Operation is inactive"})
 		}
 
-		// Upgrade to WebSocket connection after validating the operation
 		conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 		if err != nil {
 			return err
