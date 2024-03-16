@@ -3,8 +3,10 @@ package controllers
 import (
 	"log"
 	"net/http"
+	"scm-api/services/operations_service"
 	ws "scm-api/ws"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 )
@@ -15,13 +17,29 @@ var upgrader = websocket.Upgrader{
 
 func WebSocketHandler(broker *ws.Broker) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		operationID := c.QueryParam("operation-id")
+		uuidOperationID, _ := uuid.Parse(operationID)
+
+		operation, err := operations_service.GetOperationByID(uuidOperationID)
+		if err != nil {
+			if err.Error() == "operation not found" {
+				return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
+			}
+		}
+
+		// During dev checking for Inactive status.
+		// Real-Live usage will require additional validations in order to join WS "Room"
+		if operation.Status == "Inactive" {
+			return c.JSON(http.StatusForbidden, map[string]string{"error": "Unable to join operation. Operation is inactive"})
+		}
+
 		conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 		if err != nil {
 			return err
 		}
 
 		client := &ws.Client{
-			RoomID: c.QueryParam("room"),
+			RoomID: operation.ID.String(),
 			Conn:   conn,
 			Send:   make(chan []byte, 256),
 		}

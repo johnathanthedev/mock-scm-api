@@ -1,7 +1,7 @@
 CREATE TABLE
   IF NOT EXISTS vehicles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4 (),
-    name VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
     make VARCHAR(50) DEFAULT NULL,
     model VARCHAR(50) DEFAULT NULL,
     status VARCHAR(20) NOT NULL,
@@ -13,5 +13,9 @@ CREATE TABLE
     max_weight INT NOT NULL,
     last_location GEOGRAPHY (Point, 4326),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    operation_id UUID NOT NULL,
+    driver_id UUID DEFAULT NULL,
+    CONSTRAINT fk_vehicles_operations FOREIGN KEY (operation_id) REFERENCES operations (id) ON DELETE CASCADE,
+    CONSTRAINT fk_vehicles_drivers FOREIGN KEY (driver_id) REFERENCES operation_users (id) ON DELETE SET NULL
   );

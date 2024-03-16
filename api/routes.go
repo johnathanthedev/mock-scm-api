@@ -19,7 +19,11 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 	// ===================================================
 	// WS
 	// ===================================================
-	e.GET("/ws", controllers.WebSocketHandler(broker))
+	e.GET(
+		"/ws",
+		controllers.WebSocketHandler(broker),
+		// middleware.AuthorizationMiddleware(),
+	)
 
 	// ===================================================
 	// Users

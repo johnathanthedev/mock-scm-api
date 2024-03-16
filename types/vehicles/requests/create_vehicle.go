@@ -4,12 +4,9 @@ import (
 	"encoding/json"
 	models "scm-api/api/models/geo"
 	vehicle_types "scm-api/types/vehicles"
-
-	"github.com/google/uuid"
 )
 
 type CreateVehicleRequest struct {
-	OperationID    *uuid.UUID                  `json:"operation_id"`
 	VehicleType    vehicle_types.VehicleType   `json:"vehicle_type" validate:"required, oneof=Aircraft"`
 	Name           string                      `json:"name" validate:"required,min=3,max=255"`
 	CarryVolume    float32                     `json:"carry_volume" validate:"required"`
