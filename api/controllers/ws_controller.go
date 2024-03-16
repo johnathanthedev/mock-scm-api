@@ -27,6 +27,8 @@ func WebSocketHandler(broker *ws.Broker) echo.HandlerFunc {
 			}
 		}
 
+		// During dev checking for Inactive status.
+		// Real-Live usage will require additional validations in order to join WS "Room"
 		if operation.Status == "Inactive" {
 			return c.JSON(http.StatusForbidden, map[string]string{"error": "Unable to join operation. Operation is inactive"})
 		}
