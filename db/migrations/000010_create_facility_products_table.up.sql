@@ -6,6 +6,8 @@ CREATE TABLE
     demand_per_day integer DEFAULT NULL,
     production_per_day integer DEFAULT NULL,
     quantity_on_hand integer DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_facility_products_facilities FOREIGN KEY (facility_id) REFERENCES facilities (id) ON DELETE CASCADE,
     CONSTRAINT fk_facility_products_products FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
   );
