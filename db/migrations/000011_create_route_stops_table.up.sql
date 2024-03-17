@@ -4,6 +4,8 @@ CREATE TABLE
     route_id UUID NOT NULL,
     facility_id UUID NOT NULL,
     sequence integer DEFAULT 1 NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_route_stops_routes FOREIGN KEY (route_id) REFERENCES routes (id) ON DELETE CASCADE,
     CONSTRAINT fk_route_stops_facilities FOREIGN KEY (facility_id) REFERENCES facilities (id) ON DELETE CASCADE
   );

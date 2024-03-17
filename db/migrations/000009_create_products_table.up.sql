@@ -6,5 +6,7 @@ CREATE TABLE
     weight_kg INT NOT NULL,
     volume_m3 NUMERIC(10, 3) NOT NULL,
     operation_id UUID NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_products_operations FOREIGN KEY (operation_id) REFERENCES operations (id) ON DELETE CASCADE
   )

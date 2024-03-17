@@ -3,6 +3,7 @@ package api
 import (
 	controllers "scm-api/api/controllers"
 	vehicle_controllers "scm-api/api/controllers/vehicles"
+	facilities_dto "scm-api/types/facilities/dtos"
 	operation_types "scm-api/types/operations/requests"
 	user_requests "scm-api/types/users/requests"
 	vehicle_types "scm-api/types/vehicles/requests"
@@ -53,6 +54,16 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 		controllers.AddVehicleToOperation,
 		middleware.AuthorizationMiddleware(),
 		middleware.ValidationsMiddleware(cv, &operation_types.AddVehicleToOperationRequest{}),
+	)
+
+	// ===================================================
+	// Facilities
+	// ===================================================
+	e.POST(
+		"/facilities/create",
+		controllers.CreateFacility,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &facilities_dto.CreateFacilityDto{}),
 	)
 
 	// ===================================================

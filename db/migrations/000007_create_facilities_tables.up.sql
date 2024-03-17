@@ -9,5 +9,7 @@ CREATE TABLE
     daily_carbon_output INT NOT NULL,
     location GEOGRAPHY (Point, 4326) NOT NULL,
     operation_id UUID NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_facilities_operations FOREIGN KEY (operation_id) REFERENCES operations (id) ON DELETE CASCADE
   )
