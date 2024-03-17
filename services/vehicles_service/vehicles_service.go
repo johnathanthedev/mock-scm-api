@@ -28,6 +28,10 @@ func CreateVehicle(vehicle vehicle_types.CreateVehicleRequest) (*models.Vehicle,
 		PreferredSpeed: vehicle.PreferredSpeed,
 		CrewCapacity:   vehicle.CrewCapacity,
 		Attributes:     vehicle.Attributes,
+		Make:           vehicle.Make,
+		Model:          vehicle.Model,
+		OperationID:    vehicle.OperationID,
+		DriverID:       vehicle.DriverID,
 	}
 
 	if err := db.GetDB().Create(newVehicle).Error; err != nil {
