@@ -13,7 +13,7 @@ func CreateRoute(routeDto route_dtos.CreateRouteDto) (*models.Route, error) {
 		Name:             routeDto.Name,
 		OperationID:      routeDto.OperationID,
 		OriginFacilityID: routeDto.OriginFacilityID,
-		// VehicleID:        *routeDto.VehicleID,
+		VehicleID:        routeDto.VehicleID,
 	}
 
 	if err := db.GetDB().Create(newRoute).Error; err != nil {

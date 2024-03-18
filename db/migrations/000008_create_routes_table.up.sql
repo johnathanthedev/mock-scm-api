@@ -4,7 +4,7 @@ CREATE TABLE
     name VARCHAR(255) NOT NULL,
     operation_id UUID NOT NULL,
     origin_facility_id UUID DEFAULT NULL,
-    vehicle_id UUID DEFAULT NULL,
+    vehicle_id UUID NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_routes_operations FOREIGN KEY (operation_id) REFERENCES operations (id) ON DELETE CASCADE,
