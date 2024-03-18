@@ -4,8 +4,10 @@ CREATE TABLE
     name VARCHAR(255) NOT NULL,
     operation_id UUID NOT NULL,
     origin_facility_id UUID DEFAULT NULL,
+    vehicle_id UUID DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_routes_operations FOREIGN KEY (operation_id) REFERENCES operations (id) ON DELETE CASCADE,
-    CONSTRAINT fk_routes_origin_facilities FOREIGN KEY (origin_facility_id) REFERENCES facilities (id) ON DELETE SET NULL
+    CONSTRAINT fk_routes_origin_facilities FOREIGN KEY (origin_facility_id) REFERENCES facilities (id) ON DELETE SET NULL,
+    CONSTRAINT fk_routes_vehicles FOREIGN KEY (vehicle_id) REFERENCES vehicles (id) ON DELETE SET NULL
   );
