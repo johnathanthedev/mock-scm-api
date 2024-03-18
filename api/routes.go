@@ -6,6 +6,7 @@ import (
 	facilities_dto "scm-api/types/facilities/dtos"
 	operation_types "scm-api/types/operations/requests"
 	product_dtos "scm-api/types/products/dtos"
+	route_dtos "scm-api/types/routes/dtos"
 	user_requests "scm-api/types/users/requests"
 	vehicle_types "scm-api/types/vehicles/requests"
 
@@ -95,5 +96,21 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 		controllers.ListProducts,
 		middleware.AuthorizationMiddleware(),
 		middleware.ValidationsMiddleware(cv, &product_dtos.ListProductsDto{}),
+	)
+
+	// ===================================================
+	// Routes
+	// ===================================================
+	e.POST(
+		"/routes/create",
+		controllers.CreateRoute,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &route_dtos.CreateRouteDto{}),
+	)
+	e.POST(
+		"/routes/list",
+		controllers.ListRoutes,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &route_dtos.ListRoutesDto{}),
 	)
 }
