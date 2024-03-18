@@ -5,6 +5,7 @@ import (
 	vehicle_controllers "scm-api/api/controllers/vehicles"
 	facilities_dto "scm-api/types/facilities/dtos"
 	operation_types "scm-api/types/operations/requests"
+	product_dtos "scm-api/types/products/dtos"
 	user_requests "scm-api/types/users/requests"
 	vehicle_types "scm-api/types/vehicles/requests"
 
@@ -79,4 +80,20 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 		middleware.ValidationsMiddleware(cv, &vehicle_types.CreateVehicleRequest{}),
 	)
 	e.POST("/vehicles/update-location", vehicleCtrl.UpdateVehicleLocation, middleware.ValidationsMiddleware(cv, &vehicle_types.UpdateVehicleLocationRequest{}))
+
+	// ===================================================
+	// Products
+	// ===================================================
+	e.POST(
+		"/products/create",
+		controllers.CreateProduct,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &product_dtos.CreateProductDto{}),
+	)
+	e.POST(
+		"/products/list",
+		controllers.ListProducts,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &product_dtos.ListProductsDto{}),
+	)
 }
