@@ -43,5 +43,4 @@ func ListProducts(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, products)
-
 }
