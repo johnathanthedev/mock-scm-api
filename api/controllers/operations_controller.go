@@ -133,3 +133,17 @@ func AddVehicleToOperation(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Vehicle successfully added to operation"})
 }
+<<<<<<< Updated upstream
+=======
+
+func GetOperationByID(c echo.Context) error {
+	req := c.Get("validatedRequest").(*operation_dtos.GetOperationDto)
+
+	operation, err := operations_service.GetOperationByID(req.OperationID)
+	if err != nil {
+		return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
+	}
+
+	return c.JSON(http.StatusOK, operation)
+}
+>>>>>>> Stashed changes
