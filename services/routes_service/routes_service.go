@@ -3,7 +3,9 @@ package routes_service
 import (
 	"errors"
 	"scm-api/api/models"
+	geo_models "scm-api/api/models/geo"
 	"scm-api/db"
+	route_stop_dtos "scm-api/types/route-stops/dtos"
 	route_dtos "scm-api/types/routes/dtos"
 
 	"github.com/google/uuid"
@@ -25,14 +27,50 @@ func CreateRoute(routeDto route_dtos.CreateRouteDto) (*models.Route, error) {
 	return newRoute, nil
 }
 
-func GetAllRoutesByOperationID(operationID uuid.UUID) ([]models.Route, error) {
-	var routes []models.Route
+func GetAllRoutesByOperationID(operationID uuid.UUID) ([]route_dtos.RouteDto, error) {
+	var modelRoutes []models.Route
+	var dtoRoutes []route_dtos.RouteDto
 
-	if err := db.GetDB().Where("operation_id = ?", operationID).Find(&routes).Error; err != nil {
+	// Preload RouteStops and their associated Facilities
+	if err := db.GetDB().
+		Preload("RouteStops.Facility").
+		Where("operation_id = ?", operationID).
+		Find(&modelRoutes).Error; err != nil {
 		return nil, err
 	}
 
-	return routes, nil
+	for _, modelRoute := range modelRoutes {
+		var routeStopDtos []route_stop_dtos.RouteStopDto
+
+		for _, modelRouteStop := range modelRoute.RouteStops {
+			routeStopDto := route_stop_dtos.RouteStopDto{
+				ID:      modelRouteStop.ID,
+				RouteID: modelRouteStop.RouteID,
+				FacilityCoordinates: geo_models.GeoPoint{
+					Lat: modelRouteStop.Facility.Location.Lat,
+					Lng: modelRouteStop.Facility.Location.Lng,
+				},
+				Sequence:  modelRouteStop.Sequence,
+				CreatedAt: modelRouteStop.CreatedAt,
+				UpdatedAt: modelRouteStop.UpdatedAt,
+			}
+			routeStopDtos = append(routeStopDtos, routeStopDto)
+		}
+
+		dtoRoute := route_dtos.RouteDto{
+			ID:               modelRoute.ID,
+			Name:             modelRoute.Name,
+			OperationID:      modelRoute.OperationID,
+			OriginFacilityID: modelRoute.OriginFacilityID,
+			VehicleID:        modelRoute.VehicleID,
+			RouteStops:       routeStopDtos,
+			CreatedAt:        modelRoute.CreatedAt,
+			UpdatedAt:        modelRoute.UpdatedAt,
+		}
+		dtoRoutes = append(dtoRoutes, dtoRoute)
+	}
+
+	return dtoRoutes, nil
 }
 
 func GetRouteByID(routeID uuid.UUID) (*models.Route, error) {
