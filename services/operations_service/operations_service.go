@@ -5,6 +5,7 @@ import (
 	models "scm-api/api/models"
 	operation_dtos "scm-api/types/operations/dtos"
 	operation_types "scm-api/types/operations/requests"
+	"sort"
 
 	"scm-api/db"
 
@@ -134,6 +135,11 @@ func ListOperationsWithJoinStatus(userID uuid.UUID) ([]operation_dtos.OperationD
 			Joined: joined,
 		}
 	}
+
+	// Sort the operationsDtos slice by the Name field.
+	sort.Slice(operationsDtos, func(i, j int) bool {
+		return operationsDtos[i].Name < operationsDtos[j].Name
+	})
 
 	return operationsDtos, nil
 }
