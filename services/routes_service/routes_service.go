@@ -31,8 +31,9 @@ func GetAllRoutesByOperationID(operationID uuid.UUID) ([]route_dtos.RouteDto, er
 	var modelRoutes []models.Route
 	var dtoRoutes []route_dtos.RouteDto
 
-	// Preload RouteStops and their associated Facilities
+	// Preload associated Facilities
 	if err := db.GetDB().
+		Preload("OriginFacility").
 		Preload("RouteStops.Facility").
 		Where("operation_id = ?", operationID).
 		Find(&modelRoutes).Error; err != nil {
@@ -58,14 +59,16 @@ func GetAllRoutesByOperationID(operationID uuid.UUID) ([]route_dtos.RouteDto, er
 		}
 
 		dtoRoute := route_dtos.RouteDto{
-			ID:               modelRoute.ID,
-			Name:             modelRoute.Name,
-			OperationID:      modelRoute.OperationID,
-			OriginFacilityID: modelRoute.OriginFacilityID,
-			VehicleID:        modelRoute.VehicleID,
-			RouteStops:       routeStopDtos,
-			CreatedAt:        modelRoute.CreatedAt,
-			UpdatedAt:        modelRoute.UpdatedAt,
+			ID:          modelRoute.ID,
+			Name:        modelRoute.Name,
+			OperationID: modelRoute.OperationID,
+			FacilityCoordinates: geo_models.GeoPoint{
+				Lat: modelRoute.OriginFacility.Location.Lat,
+				Lng: modelRoute.OriginFacility.Location.Lng,
+			}, VehicleID: modelRoute.VehicleID,
+			RouteStops: routeStopDtos,
+			CreatedAt:  modelRoute.CreatedAt,
+			UpdatedAt:  modelRoute.UpdatedAt,
 		}
 		dtoRoutes = append(dtoRoutes, dtoRoute)
 	}
