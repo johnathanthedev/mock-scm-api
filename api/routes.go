@@ -4,6 +4,7 @@ import (
 	controllers "scm-api/api/controllers"
 	vehicle_controllers "scm-api/api/controllers/vehicles"
 	facilities_dto "scm-api/types/facilities/dtos"
+	operation_dtos "scm-api/types/operations/dtos"
 	operation_types "scm-api/types/operations/requests"
 	product_dtos "scm-api/types/products/dtos"
 	route_stop_dtos "scm-api/types/route-stops/dtos"
@@ -43,6 +44,12 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 		controllers.CreateOperation,
 		middleware.AuthorizationMiddleware(),
 		middleware.ValidationsMiddleware(cv, &operation_types.CreateOperationRequest{}),
+	)
+	e.POST(
+		"/operations/get",
+		controllers.GetOperationByID,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &operation_dtos.GetOperationDto{}),
 	)
 	e.GET("/operations/list", controllers.ListOperations, middleware.AuthorizationMiddleware())
 	e.GET("/operations/user-joined", controllers.ListUserJoinedOperations, middleware.AuthorizationMiddleware())

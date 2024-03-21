@@ -7,6 +7,7 @@ import (
 	"scm-api/services/users_service"
 	"scm-api/services/vehicles_service"
 
+	operation_dtos "scm-api/types/operations/dtos"
 	operation_requests "scm-api/types/operations/requests"
 
 	"github.com/labstack/echo/v4"
@@ -133,8 +134,6 @@ func AddVehicleToOperation(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, map[string]string{"message": "Vehicle successfully added to operation"})
 }
-<<<<<<< Updated upstream
-=======
 
 func GetOperationByID(c echo.Context) error {
 	req := c.Get("validatedRequest").(*operation_dtos.GetOperationDto)
@@ -146,4 +145,3 @@ func GetOperationByID(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, operation)
 }
->>>>>>> Stashed changes
