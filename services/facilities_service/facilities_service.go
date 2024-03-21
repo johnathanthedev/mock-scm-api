@@ -42,3 +42,13 @@ func GetFacilityByID(facilityID uuid.UUID) (*models.Facility, error) {
 
 	return &facility, nil
 }
+
+func GetAllFacilitiesByOperationID(operationID uuid.UUID) ([]models.Facility, error) {
+	var facilities []models.Facility
+
+	if err := db.GetDB().Where("operation_id = ?", operationID).Find(&facilities).Error; err != nil {
+		return nil, err
+	}
+
+	return facilities, nil
+}

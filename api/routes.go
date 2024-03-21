@@ -68,6 +68,12 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 		middleware.AuthorizationMiddleware(),
 		middleware.ValidationsMiddleware(cv, &facilities_dto.CreateFacilityDto{}),
 	)
+	e.POST(
+		"/facilities/list",
+		controllers.ListOperationFacilities,
+		middleware.AuthorizationMiddleware(),
+		middleware.ValidationsMiddleware(cv, &facilities_dto.ListFacilitiesDto{}),
+	)
 
 	// ===================================================
 	// Vehicles
