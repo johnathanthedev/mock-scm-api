@@ -143,5 +143,5 @@ func GetOperationByID(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "Operation not found"})
 	}
 
-	return c.JSON(http.StatusCreated, operation)
+	return c.JSON(http.StatusOK, operation)
 }
