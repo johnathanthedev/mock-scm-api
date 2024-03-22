@@ -16,8 +16,9 @@ func main() {
 	flag.IntVar(&forceVersion, "force", 0, "Force the version to this value if there are issues")
 	flag.Parse()
 
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	// Attempt to load the .env file if it exists, but don't exit if it's missing.
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		log.Println("Error loading .env file", err)
 	}
 
 	databaseURL := os.Getenv("DATABASE_URL")

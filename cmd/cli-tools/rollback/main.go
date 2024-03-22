@@ -13,8 +13,9 @@ import (
 
 //lint:ignore U1000 main is intentionally left unused as it serves as the entry point for this file
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
+	// Attempt to load the .env file if it exists, but don't exit if it's missing.
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		log.Println("Error loading .env file", err)
 	}
 
 	databaseURL := os.Getenv("DATABASE_URL")
