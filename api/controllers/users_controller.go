@@ -35,3 +35,12 @@ func Login(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, response_message)
 }
+
+func ListUsers(c echo.Context) error {
+	users, err := users_service.GetAllUsers()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": "Failed to retrieve users"})
+	}
+
+	return c.JSON(http.StatusOK, users)
+}
