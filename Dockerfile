@@ -12,7 +12,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -v -o scm-api ./main.go
 
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o migrate ./cmd/cli-tools/migrate/main.go
 
-RUN CGO_ENABLED=0 GOOS=linux go build -v -o migrate ./cmd/cli-tools/rollback/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -v -o rollback ./cmd/cli-tools/rollback/main.go
 
 FROM alpine:latest
 
