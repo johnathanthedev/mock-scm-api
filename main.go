@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"log"
+	"os"
 	"scm-api/api"
 	"scm-api/db"
 	ws "scm-api/ws"
@@ -11,9 +11,9 @@ import (
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		fmt.Println("Error loading .env file")
-		return
+	// Attempt to load the .env file if it exists, but don't exit if it's missing.
+	if err := godotenv.Load(); err != nil && !os.IsNotExist(err) {
+		log.Println("Error loading .env file", err)
 	}
 
 	broker := ws.NewBroker()
