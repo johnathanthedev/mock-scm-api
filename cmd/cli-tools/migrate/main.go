@@ -32,10 +32,8 @@ func main() {
 		migrationsPath = "file://db/migrations"
 	}
 
-	m, err := migrate.New(
-		migrationsPath,
-		databaseURL,
-	)
+	log.Printf("Using migrations path: %s", migrationsPath)
+	m, err := migrate.New(migrationsPath, databaseURL)
 	if err != nil {
 		log.Fatalf("could not create migration instance: %v", err)
 	}
