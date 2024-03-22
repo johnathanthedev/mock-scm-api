@@ -13,9 +13,9 @@ var (
 )
 
 func Connect() error {
-	psqlURL := os.Getenv("POSTGRESQL_URL")
+	psqlURL := os.Getenv("DATABASE_URL")
 	if psqlURL == "" {
-		return fmt.Errorf("POSTGRESQL_URL environment variable is not set")
+		return fmt.Errorf("DATABASE_URL environment variable is not set")
 	}
 
 	db, err := gorm.Open(postgres.Open(psqlURL), &gorm.Config{})

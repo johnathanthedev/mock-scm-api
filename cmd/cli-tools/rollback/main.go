@@ -17,9 +17,9 @@ func main() {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
 
-	databaseURL := os.Getenv("POSTGRESQL_URL")
+	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		log.Fatal("POSTGRESQL_URL environment variable is not set")
+		log.Fatal("DATABASE_URL environment variable is not set")
 	}
 
 	m, err := migrate.New(
