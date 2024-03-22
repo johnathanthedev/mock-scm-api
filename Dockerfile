@@ -7,6 +7,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
+COPY db/migrations /app/db/migrations
 
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o scm-api ./main.go
 

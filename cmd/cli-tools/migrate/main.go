@@ -26,8 +26,14 @@ func main() {
 		log.Fatal("DATABASE_URL environment variable is not set")
 	}
 
+	migrationsPath := os.Getenv("MIGRATIONS_PATH")
+	if migrationsPath == "" {
+		// Fallback to a local path if MIGRATIONS_PATH is not set
+		migrationsPath = "file://db/migrations"
+	}
+
 	m, err := migrate.New(
-		"file://db/migrations",
+		migrationsPath,
 		databaseURL,
 	)
 	if err != nil {
