@@ -35,6 +35,7 @@ func InitRoutes(e *echo.Echo, cv *validator.CustomValidator, broker *ws.Broker) 
 	// ===================================================
 	e.POST("/users/create", controllers.CreateUser, middleware.ValidationsMiddleware(cv, &user_requests.CreateUserRequest{}))
 	e.POST("/users/login", controllers.Login, middleware.ValidationsMiddleware(cv, &user_requests.LoginRequest{}))
+	e.GET("/users/list", controllers.ListUsers)
 
 	// ===================================================
 	// Operations

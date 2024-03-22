@@ -42,3 +42,14 @@ func GetUserIdByUsername(username string) (uuid.UUID, error) {
 
 	return user.ID, nil
 }
+
+func GetAllUsers() ([]models.User, error) {
+	var users []models.User
+	result := db.GetDB().Find(&users)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return users, nil
+}
