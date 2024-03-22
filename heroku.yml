@@ -1,8 +1,0 @@
-build:
-  go:
-    importpath: github.com/mock-scm/scm-api
-  scripts:
-    - go build -o bin/scm-api ./main.go
-
-run:
-  web: bin/scm-api
